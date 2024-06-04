@@ -28,7 +28,6 @@ public class FreactionalKnapsack {
                 capacity = 0;
                 break;
             }
-
         }
         System.out.println("Final Value = " + finalValue);
 
