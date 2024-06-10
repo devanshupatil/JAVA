@@ -1,0 +1,23 @@
+
+package Algorithms.Dynamic_Promming;
+
+class Longest_Common_Subsequence {
+
+    public static void main(String arge[]) {
+        char x[] = { 'a', 'b', 'a', 'a', 'b', 'a' };
+        char y[] = { 'b', 'a', 'b', 'b', 'a', 'b' };
+
+        int Arr[][] = new int[x.length + 1][y.length + 1];
+
+        for (int i = 1; i <= x.length; i++) {
+            for (int j = 1; j <= y.length; j++) {
+                if (x[i - 1] == y[j - 1]) {
+                    Arr[i][j] = 1 + Arr[i - 1][j - 1];
+                } else {
+                    Arr[i][j] = Math.max(Arr[i][j], Arr[i - 1][j]);
+                }
+            }
+        }
+        System.out.println(Arr[x.length][y.length]);
+    }
+}
