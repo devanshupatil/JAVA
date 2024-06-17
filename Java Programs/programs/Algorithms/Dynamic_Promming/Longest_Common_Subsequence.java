@@ -14,10 +14,21 @@ class Longest_Common_Subsequence {
                 if (x[i - 1] == y[j - 1]) {
                     Arr[i][j] = 1 + Arr[i - 1][j - 1];
                 } else {
-                    Arr[i][j] = Math.max(Arr[i][j], Arr[i - 1][j]);
+                    Arr[i][j] = Math.max(Arr[i][j - 1], Arr[i - 1][j]);
+                    printArray(Arr, x.length, y.length);
                 }
             }
         }
         System.out.println(Arr[x.length][y.length]);
+    }
+
+    public static void printArray(int[][] arr, int rows, int cols) {
+        for (int i = 0; i <= rows; i++) {
+            for (int j = 0; j <= cols; j++) {
+                System.out.print(arr[i][j] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
     }
 }
