@@ -17,6 +17,7 @@ public class Coins_Problem {
                     Arr[i][j] = Arr[i - 1][j];
                 } else {
                     Arr[i][j] = Arr[i - 1][j] + Arr[i][j - Coins[i - 1]];
+                    printArray(Arr, Coins.length, Amount);
                 }
             }
         }
@@ -24,4 +25,15 @@ public class Coins_Problem {
         System.out.println("The number of ways to change the amount " + Amount + " = " + Arr[Coins.length][Amount]);
 
     }
+
+    public static void printArray(int[][] arr, int rows, int cols) {
+        for (int i = 0; i <= rows; i++) {
+            for (int j = 0; j <= cols; j++) {
+                System.out.print(arr[i][j] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
 }
