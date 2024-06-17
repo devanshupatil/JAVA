@@ -37,6 +37,7 @@ public class Zero_one_Knapsack_Problem {
                     Arr[i][j] = Math.max((Arr[i - 1][x] + y), z);
 
                 }
+                printArray(Arr, weight.length, bagCapacitry);
 
             }
         }
@@ -78,4 +79,15 @@ public class Zero_one_Knapsack_Problem {
 
         }
     }
+
+    public static void printArray(int[][] arr, int rows, int cols) {
+        for (int i = 0; i <= rows; i++) {
+            for (int j = 0; j <= cols; j++) {
+                System.out.print(arr[i][j] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
 }
