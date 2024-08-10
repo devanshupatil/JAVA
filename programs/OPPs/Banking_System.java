@@ -14,6 +14,7 @@ class Bank {
 
     protected void addBranch(Branch branch) {
 
+        System.out.println();
         System.out.print("Enter branch name: ");
         branch.branchName = sc.nextLine();
 
@@ -43,7 +44,7 @@ class Bank {
             return;
         } else {
             System.out.println();
-            System.out.println("Invalid code!\n");
+            System.out.println("Invalid code!, Please try again");
             return;
         }
 
@@ -54,7 +55,6 @@ class Bank {
         System.out.println();
         System.out.print("Enter branch code: ");
         branchCode = sc.nextLine();
-        sc.close();
 
         if (branchs.containsKey(branchCode)) {
 
@@ -64,7 +64,7 @@ class Bank {
 
         } else {
 
-            System.out.println("Invalid code!\n");
+            System.out.println("Invalid code!, Please try again");
             return;
         }
     }
@@ -129,7 +129,7 @@ class Branch {
             return;
         } else {
             System.out.println();
-            System.out.println("Invalid Account Number!\n");
+            System.out.println("Invalid Account Number!, Please try again");
             return;
         }
 
@@ -150,7 +150,7 @@ class Branch {
             return;
         } else {
             System.out.println();
-            System.out.println("Invalid Account Number!\n");
+            System.out.println("Invalid Account Number!, Please try again");
             return;
         }
     }
@@ -212,7 +212,7 @@ class Account {
             return;
         } else {
             System.out.println();
-            System.out.println("Invalid Account Number!\n");
+            System.out.println("Invalid Account Number!, Please try again");
             return;
         }
 
@@ -234,7 +234,7 @@ class Account {
         } else {
 
             System.out.println();
-            System.out.println("Invalid Account Number!\n");
+            System.out.println("Invalid Account Number!, Please try again");
             return;
         }
     }
@@ -277,6 +277,7 @@ public class Banking_System {
 
     public static String accountType(int Choise) {
 
+        System.out.println();
         System.out.println("1. Saving Account");
         System.out.println("2. Current Account");
         Scanner sc = new Scanner(System.in);
@@ -302,21 +303,98 @@ public class Banking_System {
         return null;
     }
 
-    public static void desplayMenu() {
+    public static void accountsMenu(int choise) {
+        System.out.println();
+        System.out.println("1. Open Account");
+        System.out.println("2. Close Account");
+        System.out.println("3. Check Account");
+        System.out.println("4. Back");
+
+        Branch branch = new Branch();
+        Account account = new Account();
+        Costomer costomer = new Costomer();
+
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter Choise: ");
+        choise = sc.nextInt();
+
+        switch (choise) {
+            case 1:
+
+                branch.addAccount(costomer, account);
+                break;
+            case 2:
+
+                branch.removeAccount(0);
+                break;
+            case 3:
+
+                branch.getAccount(0);
+                break;
+
+            case 4:
+                return;
+            default:
+                System.out.println("Invalid choise, Please try again");
+                break;
+        }
+        System.out.println();
+        accountsMenu(choise);
+
+    }
+
+    public static void branchMenu(int choise) {
+        System.out.println();
         System.out.println("1. Open new Branch");
         System.out.println("2. Check Branch");
         System.out.println("3. Check All Branch");
         System.out.println("4. close Branch");
-        System.out.println("5. Open Account");
-        System.out.println("6. Close Account");
-        System.out.println("7. Check Account");
-        System.out.println("8. Loans");
-        System.out.println("9. Exit");
+        System.out.println("5. Back");
+
+        Bank bank = new Bank();
+        Branch branch = new Branch();
+
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter Choise: ");
+        choise = sc.nextInt();
+
+        switch (choise) {
+            case 1:
+                bank.addBranch(branch);
+
+                break;
+            case 2:
+                bank.getBranch(null);
+                break;
+            case 3:
+
+                bank.getAllBranch();
+                break;
+            case 4:
+                bank.removeBranch(null);
+
+                break;
+            case 5:
+                return;
+            default:
+                System.out.println("Invalid choise, Please try again");
+                break;
+        }
+        System.out.println();
+        branchMenu(choise);
+    }
+
+    public static void desplayMenu() {
+        System.out.println("1. Branch");
+        System.out.println("2. Accounts");
+        System.out.println("3. Loans");
+        System.out.println("4. Exit");
         return;
     }
 
     public static void Loans(int Choise) {
 
+        System.out.println();
         System.out.println("1. Take Loan");
         System.out.println("2. Close Loan");
         System.out.println("3. Check Loan");
@@ -360,10 +438,6 @@ public class Banking_System {
     public static void UserChoise(int Choise) {
 
         Scanner sc = new Scanner(System.in);
-        Bank bank = new Bank();
-        Costomer costomer = new Costomer();
-        Branch branch = new Branch();
-        Account account = new Account();
 
         desplayMenu();
         System.out.print("Enter Choise: ");
@@ -371,39 +445,18 @@ public class Banking_System {
 
         switch (Choise) {
             case 1:
-                bank.addBranch(branch);
+                branchMenu(0);
                 break;
             case 2:
-                bank.getBranch(null);
-
+                accountsMenu(0);
                 break;
             case 3:
-                bank.getAllBranch();
-                break;
-            case 4:
-                bank.removeBranch(null);
-
-                break;
-            case 5:
-
-                String type = accountType(Choise);
-                account.type = type;
-                branch.addAccount(costomer, account);
-
-                break;
-            case 6:
-                branch.removeAccount(0);
-
-                break;
-            case 7:
-                branch.getAccount(0);
-
-                break;
-            case 8:
                 Loans(0);
                 break;
-            case 9:
+            case 4:
+                System.out.println("\nTHANK YOU FOR USEING BANKING SYSYTEM.");
                 System.exit(0);
+
                 break;
             default:
                 System.out.println("Invalid choise, Please try again");
@@ -416,6 +469,8 @@ public class Banking_System {
 
     public static void main(String[] args) {
 
+        System.out.println("-----------*** WELCOME TO BANKING SYSTEM ***-----------\n");
+        System.out.println("----->> Choose the choise <<-----");
         UserChoise(0);
     }
 
