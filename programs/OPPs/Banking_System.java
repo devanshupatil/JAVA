@@ -1,4 +1,5 @@
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Scanner;
@@ -37,6 +38,7 @@ class Bank {
 
         branchCode.put(branch.location, branch.branchCode);
         branchs.put(branch.branchCode, branch);
+        branch.date_Of_Opping = java.time.LocalDate.now();
 
         System.out.println();
         System.out.println(branch.branchName + " branch is successfully added in " + branch.location);
@@ -58,6 +60,7 @@ class Bank {
             System.out.println("Branch name: " + branchs.get(branchCode).branchName);
             System.out.println("Branch code: " + branchs.get(branchCode).branchCode);
             System.out.println("Location: " + branchs.get(branchCode).location);
+            System.out.println("Date of opping: " + branchs.get(branchCode).date_Of_Opping);
             return;
         } else {
             System.out.println();
@@ -100,6 +103,7 @@ class Branch {
     protected String branchName;
     protected Integer branchCode;
     protected String location;
+    protected LocalDate date_Of_Opping;
     protected HashMap<Integer, Account> accounts = new HashMap<>();
 
     Scanner sc = new Scanner(System.in);
@@ -142,12 +146,16 @@ class Branch {
             System.out.println("Account Number: " + accounts.get(accountNumber).accountNumber);
 
             if (accounts.get(accountNumber).type == "Saving Account") {
+                System.out.println("Opping Date: "
+                        + accounts.get(accountNumber).saving_Accounts.get(accountNumber).date_Of_Opping);
                 System.out.println(
                         "Account type: " + accounts.get(accountNumber).saving_Accounts.get(accountNumber).type);
 
                 System.out
                         .println("Balance: " + accounts.get(accountNumber).saving_Accounts.get(accountNumber).balancel);
             } else {
+                System.out.println("Opping Date: "
+                        + accounts.get(accountNumber).current_Accounts.get(accountNumber).date_Of_Opping);
                 System.out.println(
                         "Account type: " + accounts.get(accountNumber).current_Accounts.get(accountNumber).type);
                 System.out.println(
@@ -189,7 +197,8 @@ class Branch {
     }
 
     public String toString() {
-        return "  Branch ID: " + branchCode + ", Name: " + branchName + ", Location: " + location;
+        return "  Branch ID: " + branchCode + ", Name: " + branchName + ", Location: " + location + ", Opping date: "
+                + date_Of_Opping;
     }
 }
 
@@ -197,6 +206,7 @@ class Account {
 
     protected int accountNumber;
     protected double balancel;
+    protected LocalDate date_Of_Opping;
     protected String type;
     protected HashMap<Integer, Saving_Account> saving_Accounts = new HashMap<>();
     protected HashMap<Integer, Current_Account> current_Accounts = new HashMap<>();
@@ -385,8 +395,7 @@ class Account {
 
 class Saving_Account extends Account {
 
-    double min_Balance;
-    String date_Of_Opping;
+    protected double min_Balance;
 
     protected void addCostomer(Integer branchCode, String Type) {
         Saving_Account saving_account = new Saving_Account();
@@ -401,17 +410,18 @@ class Saving_Account extends Account {
         System.out.print("Enter address: ");
         costomer.address = sc.nextLine();
 
-        System.out.print("Enter date: ");
-        date_Of_Opping = sc.nextLine();
-
         System.out.print("Enter phone number: ");
         costomer.phone_no = sc.nextInt();
 
         costomer.userId = random.nextInt(1000000000);
         accountNumber = random.nextInt(1000000000);
+
+        saving_account.date_Of_Opping = java.time.LocalDate.now();
         saving_account.type = Type;
         saving_account.accountNumber = accountNumber;
         saving_Accounts.put(accountNumber, saving_account);
+
+        System.out.println(saving_account);
 
         System.out.println();
         System.out.println(costomer.Name + " is successfully generated the " + Type);
@@ -423,8 +433,7 @@ class Saving_Account extends Account {
 }
 
 class Current_Account extends Account {
-    int interest_Rate;
-    String date_Of_Opping;
+    protected int interest_Rate;
 
     protected void addCostomer(Integer branchCode, String Type) {
         Current_Account current_account = new Current_Account();
@@ -438,14 +447,13 @@ class Current_Account extends Account {
         System.out.print("Enter address: ");
         costomer.address = sc.nextLine();
 
-        System.out.print("Enter date: ");
-        date_Of_Opping = sc.nextLine();
-
         System.out.print("Enter phone number: ");
         costomer.phone_no = sc.nextInt();
 
         costomer.userId = random.nextInt(1000000000);
         accountNumber = random.nextInt(1000000000);
+
+        current_account.date_Of_Opping = java.time.LocalDate.now();
         current_account.type = Type;
         current_account.accountNumber = accountNumber;
         current_Accounts.put(accountNumber, current_account);
@@ -459,10 +467,10 @@ class Current_Account extends Account {
 }
 
 class Costomer {
-    int userId;
-    String Name;
-    String address;
-    int phone_no;
+    protected int userId;
+    protected String Name;
+    protected String address;
+    protected int phone_no;
 }
 
 public class Banking_System {
@@ -671,6 +679,7 @@ public class Banking_System {
 
                 case 3:
                     System.out.println("\nTHANK YOU FOR USEING BANKING SYSYTEM.");
+                    sc.close();
                     System.exit(0);
 
                     break;
