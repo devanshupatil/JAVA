@@ -10,84 +10,32 @@ import java.time.format.DateTimeParseException;
 class Hotel {
     protected String name;
     protected String Location;
-    protected int rooms;
     protected HashMap<Integer, Room> Rooms = new HashMap<>();
-    protected HashMap<Integer, Room> availabls_Rooms = new HashMap<>();
 
-    private Scanner sc = new Scanner(System.in);
+    protected Hotel(String name, String Location) {
 
-    public int viewRoom(int guest, double amount) {
-
-        System.out.println();
-        System.out.print("Enter number guest: ");
-        guest = sc.nextInt();
-
-        for (int i = 1; i <= Rooms.size(); i++) {
-
-            if (guest == 2) {
-
-                if (Rooms.get(i).room_Type == "Double Room") {
-                    System.out.println();
-                    System.out.println("Room Type: " + Rooms.get(i).room_Type);
-                    System.out.println("Price: " + Rooms.get(i).price);
-                    rooms = 1;
-                    return i;
-                }
-
-            } else if (guest > 2) {
-
-                int sum = 0;
-
-                if (Rooms.get(i).room_Type == "Double Room") {
-
-                    System.out.println();
-
-                    if (guest % 2 == 0) {
-
-                        guest = guest / 2;
-                        amount = guest * Rooms.get(i).price;
-                    } else {
-
-                        guest = guest / 2;
-                        amount = guest * Rooms.get(i).price;
-                        sum = guest % 2;
-                        amount += sum * 400;
-                    }
-
-                    System.out.println("Room Type: " + Rooms.get(i).room_Type);
-                    System.out.println("Price: " + amount);
-                    System.out.println("Rooms: " + guest);
-                    rooms = guest;
-
-                    return i;
-                }
-
-            } else {
-
-                if (Rooms.get(i).room_Type == "Single Room") {
-
-                    System.out.println();
-                    System.out.println("Room Type: " + Rooms.get(i).room_Type);
-                    System.out.println("Price: " + Rooms.get(i).price);
-                    rooms = 1;
-                    return i;
-                }
-            }
-
-        }
-
-        return 1;
+        this.name = name;
+        this.Location = Location;
     }
 }
 
-class Receptionist extends Hotel {
+class Receptionist {
 
     protected HashMap<String, Booking> bookings = new HashMap<>();
 
     private Scanner sc = new Scanner(System.in);
-    protected Booking booking = new Booking();
+    Booking booking = new Booking();
+    protected int guest_Total_Rooms;
+    private Hotel hotel;
 
-    protected void addBooking(String room_Type, LocalDate check_In_Date, LocalDate check_Out_Date) {
+    protected Receptionist(Hotel hotel) {
+        this.hotel = hotel;
+    }
+
+    protected void addBooking() {
+
+        LocalDate check_In_Date;
+        LocalDate check_Out_Date;
 
         System.out.println();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -117,64 +65,32 @@ class Receptionist extends Hotel {
             return;
         }
 
-        int x = viewRoom(0, 0);
+        int guest;
 
-        if (availabls_Rooms.size() < rooms || Rooms.size() < rooms) {
+        System.out.print("Enter number of guests: ");
+        guest = sc.nextInt();
 
-            System.out.println("Sorry the rooms are not availabls!");
+        guest_Total_Rooms = (guest / 2) + (guest % 2);
+        sc.nextLine();
 
-        } else if (availabls_Rooms.size() == 0) {
+        if (Is_Availabls(check_In_Date, check_Out_Date)) {
 
-            if (Is_Availabls(check_In_Date, check_Out_Date)) {
+            System.out.println();
+            System.out.println("Guest total rooms: " + guest_Total_Rooms);
+            System.out.println("Price:- " + total_Amount(0.0, guest));
+            booking.addBooking();
+            bookings.put(booking.bookingId, booking);
 
-                booking.addBooking(Rooms.get(x).room_Type);
-                booking.price = Rooms.get(x).price;
+            System.out.println();
+            System.out.println(booking.guest.name + " have successfully booked the room");
+            System.out.println("Booking ID: " + booking.bookingId);
 
-                booking.check_In_Date = check_In_Date;
-                booking.check_Out_Date = check_Out_Date;
-                bookings.put(booking.bookingId, booking);
-
-                System.out.println();
-                System.out.println(booking.guest.name + " have successfully booked " + booking.room_Type);
-                System.out.println("Booking ID: " + booking.bookingId);
-
-            } else {
-
-                System.out.println("Sorry the room is not availabls in " + check_In_Date);
-            }
         } else {
 
-            for (int j = 1; j <= availabls_Rooms.size(); j++) {
-
-                if (availabls_Rooms.get(j).room_Type == Rooms.get(x).room_Type) {
-
-                    availabls_Rooms.remove(j);
-                    rooms--;
-                    if (rooms == 0) {
-                        break;
-                    }
-
-                }
-            }
-
-            if (rooms == 0) {
-
-                booking.addBooking(Rooms.get(x).room_Type);
-                booking.price = Rooms.get(x).price;
-
-                booking.check_In_Date = check_In_Date;
-                booking.check_Out_Date = check_Out_Date;
-                bookings.put(booking.bookingId, booking);
-
-                System.out.println();
-                System.out.println(booking.guest.name + " have successfully booked " + booking.room_Type);
-                System.out.println("Booking ID: " + booking.bookingId);
-
-            } else {
-
-                System.out.println("Sorry the rooms are not availabls!");
-            }
+            System.out.println();
+            System.out.println("Sorry the rooms not available!");
         }
+
         return;
     }
 
@@ -183,9 +99,11 @@ class Receptionist extends Hotel {
         if (bookings.containsKey(bookingId)) {
 
             bookings.remove(bookingId);
+            System.out.println();
             System.out.println("Your booking is successfully cancel");
         } else {
 
+            System.out.println();
             System.out.println("Invalid Bookind ID!, Please try again");
         }
 
@@ -197,15 +115,15 @@ class Receptionist extends Hotel {
         if (bookings.containsKey(bookingId)) {
 
             System.out.println();
-            System.out.println("Name: " + booking.guest.name);
-            System.out.println("Address: " + booking.guest.address);
-            System.out.println("Id: " + booking.guest.Id);
-            System.out.println("Phone No.: " + booking.guest.phone_NO);
-            System.out.println("Booking ID: " + booking.bookingId);
-            System.out.println("Room Type: " + booking.room_Type);
+            System.out.println("Name: " + bookings.get(bookingId).guest.name);
+            System.out.println("Address: " + bookings.get(bookingId).guest.address);
+            System.out.println("Id: " + bookings.get(bookingId).guest.Id);
+            System.out.println("Phone No.: " + bookings.get(bookingId).guest.phone_NO);
+            System.out.println("Booking ID: " + bookings.get(bookingId).bookingId);
 
         } else {
 
+            System.out.println();
             System.out.println("Invalid Booking ID, Please try again");
         }
         return;
@@ -213,42 +131,72 @@ class Receptionist extends Hotel {
 
     protected boolean Is_Availabls(LocalDate check_In_Date, LocalDate check_Out_Date) {
 
-        Set<String> keys = bookings.keySet();
+        int in_day = check_In_Date.getDayOfMonth();
+        int out_day = check_Out_Date.getDayOfMonth();
+        int count = 0;
 
-        for (String key : keys) {
+        if (hotel.Rooms.size() < guest_Total_Rooms) {
 
-            if (bookings.get(key).check_Out_Date.getYear() < check_In_Date.getYear()) {
+            return false;
 
-            } else if (bookings.get(key).check_Out_Date.getDayOfMonth() <= check_In_Date.getDayOfMonth()) {
+        } else if (bookings.size() != 0) {
 
-                if (bookings.get(key).check_Out_Date.getDayOfMonth() <= check_In_Date.getDayOfMonth()) {
+            Set<String> keys = bookings.keySet();
 
-                    System.out.println();
-                    System.out.println(
-                            bookings.get(key).room_Type + " type of room is availabls in " + check_In_Date);
-                    System.out.println("You have to check in after 12:00 PM");
+            while (in_day != out_day) {
 
-                    return true;
+                for (String key : keys) {
 
+                    if (bookings.get(key).check_Out_Date != check_In_Date
+
+                            || bookings.get(key).check_In_Date != check_Out_Date) { // 23-09-2024
+
+                        count++;
+                    }
+
+                }
+
+                if (guest_Total_Rooms <= (count - hotel.Rooms.size())) {
+
+                    check_In_Date = LocalDate.of(check_In_Date.getYear(), check_In_Date.getMonthValue(), in_day++);
                 } else {
+
                     return false;
                 }
+
             }
+            return true;
+        }
+
+        return true;
+    }
+
+    protected double total_Amount(double amount, int guest) {
+
+        int sum = 0;
+
+        if (guest >= 3) {
+
+            guest = guest / 2;
+            amount = guest * 2500;
+            sum = guest % 2;
+            amount += sum * 400;
+            guest_Total_Rooms = guest;
 
         }
-        return true;
+
+        return amount;
     }
 }
 
 class Room {
 
     protected Integer room_No; // 5
-    protected String room_Type; // single = 2 , double = 3
     protected double price; // single = 1500, double = 2500
 
 }
 
-class Booking extends Room {
+class Booking {
 
     protected String bookingId;
     protected Integer person;
@@ -257,8 +205,9 @@ class Booking extends Room {
     protected LocalDate check_Out_Date;
     Scanner sc = new Scanner(System.in);
     Guest guest = new Guest();
+    Room room = new Room();
 
-    protected void addBooking(String room_type) {
+    protected void addBooking() {
 
         Random random = new Random();
         System.out.println();
@@ -275,8 +224,6 @@ class Booking extends Room {
         guest.phone_NO = sc.nextInt();
 
         bookingId = String.valueOf(random.nextInt(1000000000));
-
-        room_Type = room_type;
 
         return;
     }
@@ -306,36 +253,24 @@ public class Hotel_Reserevation_System {
 
         Scanner sc = new Scanner(System.in);
 
-        Receptionist receptionist = new Receptionist();
-
-        receptionist.name = "The Grand Mehfil";
-        receptionist.Location = "Camp Rd, next to dayasagar hospital, Maltekdi, Amravati, Maharashtra 444602";
-
-        for (int i = 1; i <= 2; i++) {
-            Room room = new Room();
-
-            room.room_No = i;
-            room.price = 1500.0;
-            room.room_Type = "Single Room";
-
-            receptionist.Rooms.put(room.room_No, room);
-        }
-
-        for (int i = 3; i <= 4; i++) {
-            Room room = new Room();
-            room.room_No = i;
-            room.price = 2500.0;
-            room.room_Type = "Double Room";
-
-            receptionist.Rooms.put(room.room_No, room);
-        }
-
-        receptionist.availabls_Rooms.putAll(receptionist.Rooms);
+        Hotel hotel = new Hotel("The Grand Mehfil Hotel",
+                "Camp Rd, next to dayasagar hospital, Maltekdi, Amravati, Maharashtra 444602");
 
         System.out.println(
                 "===============================*** WELCOME TO HOTEL RESEREVATION SYSYTEM ***===============================\n\n");
-        System.out.println("Hotel Name: " + receptionist.name);
-        System.out.println("Location: " + receptionist.Location);
+        System.out.println("Name:- " + hotel.name);
+        System.out.println("Location:- " + hotel.Location);
+
+        Receptionist receptionist = new Receptionist(hotel);
+        Room room = new Room();
+
+        for (int i = 1; i <= 4; i++) {
+
+            room.room_No = i;
+            room.price = 2500.0;
+
+            hotel.Rooms.put(room.room_No, room);
+        }
 
         int choise = 0;
         String bookingid;
@@ -350,8 +285,7 @@ public class Hotel_Reserevation_System {
             switch (choise) {
                 case 1:
 
-                    receptionist.addBooking(null, null, null);
-
+                    receptionist.addBooking();
                     break;
                 case 2:
 
