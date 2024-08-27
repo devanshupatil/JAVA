@@ -1,3 +1,4 @@
+
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Random;
@@ -239,6 +240,10 @@ class Guest {
 }
 
 public class Hotel_Reserevation_System {
+    public static final String RESET = "\u001B[0m";
+    public static final String GREEN = "\u001B[32m";
+    public static final String CYAN = "\u001B[36m";
+    public static final String BOLD = "\u001B[1m";
 
     public static void menu() {
 
@@ -256,10 +261,11 @@ public class Hotel_Reserevation_System {
         Hotel hotel = new Hotel("The Grand Mehfil Hotel",
                 "Camp Rd, next to dayasagar hospital, Maltekdi, Amravati, Maharashtra 444602");
 
-        System.out.println(
-                "===============================*** WELCOME TO HOTEL RESEREVATION SYSYTEM ***===============================\n\n");
-        System.out.println("Name:- " + hotel.name);
-        System.out.println("Location:- " + hotel.Location);
+        System.out.println(BOLD + GREEN +
+                "\n===============================*** WELCOME TO HOTEL RESEREVATION SYSYTEM ***===============================\n\n"
+                + RESET);
+        System.out.println(BOLD + "Name:- " + hotel.name + RESET);
+        System.out.println(BOLD + "Location:- " + hotel.Location + RESET);
 
         Receptionist receptionist = new Receptionist(hotel);
         Room room = new Room();
